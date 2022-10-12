@@ -1,6 +1,7 @@
 # API_design_documentation_exercise
 
 1. We are implementing NoSQL
+    - We are implementing NoSQL because it stores data in simple straightforward forms.
 
 # How we would structure our Schema:
 
@@ -58,6 +59,17 @@ db.createCollection("house",{
     }
 })
 ```
+
+# NoSQL Function to search for people within certain age brackets and with specific household sizes
+
+```ruby
+db = connect("localhost:8080/people")
+
+function ageBracket(){
+    db.people.find($and:[{age:{$gt:17}}, {age:{$lt:100}, {num_of_people:{$gt:2}}}])
+}
+```
+
 # The requests our API should be capable of handling
 
 ## Example routers to get data on people:
