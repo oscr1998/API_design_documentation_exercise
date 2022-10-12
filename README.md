@@ -1,9 +1,6 @@
 # API_design_documentation_exercise
 
-1. We are implementing NoSQL
-    - We are implementing NoSQL because it stores data in simple straightforward forms.
-
-# How we would structure our Schema:
+# How we would structure our Schema with NoSQL:
 
 ```ruby
 db.createCollection("People",{
@@ -60,7 +57,7 @@ db.createCollection("house",{
 })
 ```
 
-# NoSQL Function to search for people within certain age brackets and with specific household sizes
+## NoSQL Function to search for people within certain age brackets and with specific household sizes
 
 ```ruby
 db = connect("localhost:8080/people")
@@ -69,7 +66,32 @@ function ageBracket(){
     db.people.find($and:[{age:{$gt:17}}, {age:{$lt:100}, {num_of_people:{$gt:2}}}])
 }
 ```
+# How we would structure our Schema with SQL:
 
+```ruby
+DROP TABLE IF EXISTS people;
+CREATE TABLE people (
+    id SERIAL PRIMARY KEY 
+    owner REFERENCES house (owner) NOT NULL
+    name VARCHAR ( 40 )
+    age INT,
+    num_of_people INT,
+);
+COPY people
+FROM $str$/code/data/people.csv$str$
+DELIMITER ',' CSV HEADER;
+
+DROP TABLE IF EXISTS house;
+CREATE TABLE house (
+    id SERIAL PRIMARY KEY 
+    postcode VARCHAR ( 40 )
+    street_address VARCHAR ( 40 ),
+    owner VARCHAR ( 40 ),
+);
+COPY house
+FROM $str$/code/data/houses.csv$str$
+DELIMITER ',' CSV HEADER;
+```
 # The requests our API should be capable of handling
 
 ## Example routers to get data on people:
@@ -128,7 +150,7 @@ router.get('/houses/owner', (req, res) => {
 
 ## Example post and delete routers:
 
-### Post:
+### <ins> Post:
 Backend:
 ```ruby
 router.post('/people', (req, res) => {
@@ -155,7 +177,7 @@ const postEntry = async (name, age, num_of_people) => {
     })
 }
 ```
-### Delete
+### <ins> Delete
 Backend:
 ```ruby
 router.delete('/:id', (req, res) => {
@@ -190,3 +212,4 @@ router.put('/people/:id', (req, res) => {
 })
 
 ```
+
